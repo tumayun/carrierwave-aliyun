@@ -19,20 +19,20 @@ describe 'Aliyun' do
   #   @uploader.aliyun_internal = true
   #   @connection = CarrierWave::Storage::Aliyun.new(@uploader)
   #   puts @connection.to_json
-  #   url = @connection.put("/a/a.jpg",load_file("foo.jpg"))
+  #   url = @connection.put("/a/a.jpg",file_path("foo.jpg"))
   #   res = Net::HTTP.get_response(URI.parse(url))
   #   puts res.to_json
   #   expect(res.code).to eq "200"
   # end
 
   it 'should put' do
-    url = @bucket.put('a/a.jpg', load_file('foo.jpg'))
+    url = @bucket.put('a/a.jpg', file_path('foo.jpg'))
     res = Net::HTTP.get_response(URI.parse(url))
     expect(res.code).to eq '200'
   end
 
   it 'should put with / prefix' do
-    url = @bucket.put('/a/a.jpg', load_file('foo.jpg'))
+    url = @bucket.put('/a/a.jpg', file_path('foo.jpg'))
     res = Net::HTTP.get_response(URI.parse(url))
     expect(res.code).to eq '200'
   end
@@ -46,11 +46,11 @@ describe 'Aliyun' do
   it 'should support custom domain' do
     @uploader.aliyun_host = 'https://foo.bar.com'
     @bucket = CarrierWave::Aliyun::Bucket.new(@uploader)
-    url = @bucket.put('a/a.jpg', load_file('foo.jpg'))
+    url = @bucket.put('a/a.jpg', file_path('foo.jpg'))
     expect(url).to eq 'https://foo.bar.com/a/a.jpg'
     @uploader.aliyun_host = 'http://foo.bar.com'
     @bucket = CarrierWave::Aliyun::Bucket.new(@uploader)
-    url = @bucket.put('a/a.jpg', load_file('foo.jpg'))
+    url = @bucket.put('a/a.jpg', file_path('foo.jpg'))
     expect(url).to eq 'http://foo.bar.com/a/a.jpg'
   end
 
@@ -68,8 +68,8 @@ describe 'Aliyun' do
     end
 
     it 'should get url with :thumb' do
-      url = @bucket.private_get_url('bar/foo.jpg', thumb: '@100w_200h_90q')
-      expect(url).to include "https://#{@uploader.aliyun_bucket}.img-cn-beijing.aliyuncs.com/bar/foo.jpg@100w_200h_90q"
+      url = @bucket.private_get_url('bar/foo.jpg', thumb: '?x-oss-process=image/resize,m_fill,h_100,w_100')
+      expect(url).to include "https://#{@uploader.aliyun_bucket}.oss-cn-beijing.aliyuncs.com/bar/foo.jpg?x-oss-process=image/resize,m_fill,h_100,w_100"
     end
   end
 

@@ -95,10 +95,10 @@ describe 'Upload' do
 
       it 'should get Aliyun OSS thumb url with :thumb option' do
         url = @photo.image.url(thumb: '?x-oss-process=image/resize,w_100')
-        expect(url).to include('https://carrierwave-aliyun-test.oss-cn-beijing.aliyuncs.com')
+        expect(url).to include("https://#{ALIYUN_BUCKET}.oss-cn-beijing.aliyuncs.com")
         expect(url).to include('?x-oss-process=image/resize,w_100')
         url1 = @photo.image.url(thumb: '?x-oss-process=image/resize,w_60')
-        expect(url1).to include('https://carrierwave-aliyun-test.oss-cn-beijing.aliyuncs.com')
+        expect(url1).to include("https://#{ALIYUN_BUCKET}.oss-cn-beijing.aliyuncs.com")
         expect(url1).to include('?x-oss-process=image/resize,w_60')
         img1 = open(url)
         expect(img1.size).not_to eq 0
